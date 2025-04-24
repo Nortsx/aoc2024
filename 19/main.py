@@ -4,8 +4,8 @@ def check_towel(towels_data, pattern_data):
     for i in range(len(towels_data)):
         if len(towels_data[i]) > len(pattern_data):
             continue
-        if towels_data[i] == pattern_data[0:len(towels[i])]:
-            if check_towel(towels_data, pattern_data[len(towels[i]):]):
+        if towels_data[i] == pattern_data[0:len(towels_data[i])]:
+            if check_towel(towels_data, pattern_data[len(towels_data[i]):]):
                 return True
     return False
 
