@@ -11,8 +11,6 @@ for i in range(1, 1025):
     print(x, y)
     grid[y][x] = '#'
 
-for row in grid:
-    print("".join(row))
 
 end_pos = (size - 1 , size - 1)
 
