@@ -4,10 +4,13 @@ grid = [[elem for elem in line.strip()] for line in open("input.txt").readlines(
 print(grid)
 
 start_pos = (0, 0)
+end_post = (0, 0)
 for y in range(len(grid)):
     for x in range(len(grid[y])):
         if grid[y][x] == 'S':
             start_pos = (x, y)
+        if grid[y][x] == 'E':
+            end_pos = (x, y)
 print(start_pos)
 
 
@@ -26,31 +29,22 @@ def find_path(start_pos, map) -> []:
                 elif map[y + dy][x + dx] == 'E':
                     return dots_path
 
-def find_cheat_spots(grid, waypoints) -> {}:
-    cheat_spots = defaultdict(int)
-
-    waypoints_dict = {}
-    for i in range(len(waypoints)):
-        waypoints_dict[waypoints[i]] = i
-
-    for i in range(len(waypoints)):
-        wx, wy = waypoints[i]
-        for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-            if grid[wy + dy][wx + dx] == '#':
-                if 0 <= wx + 2*dx < len(grid[0]) and 0 <= wy + 2*dy < len(grid):
-                    if grid[wy + 2*dy][wx + 2*dx] == '.':
-                        if waypoints_dict[(wx + 2*dx, wy + 2*dy)] - i > 0:
-                            cheat_spots[waypoints_dict[(wx + 2*dx, wy + 2*dy)] - i - 2] += 1
-                    if grid[wy + 2*dy][wx + 2*dx] == 'E':
-                        cheat_spots[len(waypoints) - i - 2] += 1
-    return cheat_spots
-
 race_track_dots = find_path(start_pos, grid)
-spots = find_cheat_spots(grid, race_track_dots)
-print(spots)
+race_track_dots.append(end_pos)
+
+cheats = defaultdict(int)
+
+for first_cheat_index in range(len(race_track_dots)):
+    for potential_cheat_index in range(first_cheat_index + 1, len(race_track_dots)):
+        earlier_dot = race_track_dots[first_cheat_index]
+        later_dot = race_track_dots[potential_cheat_index]
+        if (earlier_dot[1] == later_dot[1] and abs(earlier_dot[0] - later_dot[0]) == 2) or (earlier_dot[0] == later_dot[0] and abs(earlier_dot[1] - later_dot[1]) == 2):
+            if potential_cheat_index - first_cheat_index - 2 > 0:
+                cheats[potential_cheat_index - first_cheat_index - 2] += 1
+print(cheats)
 
 total = 0
-for idx, val in spots.items():
+for idx, val in cheats.items():
     if idx >= 100:
         total += val
 
