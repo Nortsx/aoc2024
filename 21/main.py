@@ -156,7 +156,6 @@ for code in inputs:
     print(combined_paths)
     current_total = 10000000000000
     for path_variant in combined_paths:
-        #TODO for other pads we need to look for combined paths too
         second_pad_path = calculate_path_for_cp(path_variant)
         print(second_pad_path)
         third_pad_path = calculate_path_for_cp(second_pad_path)
@@ -169,4 +168,3 @@ for code in inputs:
 
     total += current_total
 print(total)
-#TODO debug, gives a but too much
