@@ -136,6 +136,12 @@ def calculate_path_for_cp(entry):
 
     return output
 
+def combine_paths(provided_paths, current_path, idx, results):
+    if idx == len(provided_paths):
+        results.append(current_path)
+        return
+    for path in provided_paths[idx]:
+        combine_paths(paths, current_path + path + 'A', idx + 1, results)
 
 total = 0
 for code in inputs:
@@ -144,16 +150,23 @@ for code in inputs:
     paths = first_pad_path.split('A')
     paths = paths[:-1]
     print(paths)
-    print(get_all_shortest_keypad_paths(code, keypad, paths))
-    #TODO gather all paths to possible routers
-#     second_pad_path = calculate_path_for_cp(first_pad_path)
-#     print(second_pad_path)
-#     third_pad_path = calculate_path_for_cp(second_pad_path)
-#     print(third_pad_path)
-#     print(code)
-#     print(len(third_pad_path))
-#     parsed_integer = int(code[:-1])
-#     total += parsed_integer * len(third_pad_path)
-#
-# print(total)
+    paths = get_all_shortest_keypad_paths(code, keypad, paths)
+    combined_paths = []
+    combine_paths(paths, '', 0, combined_paths)
+    print(combined_paths)
+    current_total = 10000000000000
+    for path_variant in combined_paths:
+        #TODO for other pads we need to look for combined paths too
+        second_pad_path = calculate_path_for_cp(path_variant)
+        print(second_pad_path)
+        third_pad_path = calculate_path_for_cp(second_pad_path)
+        print(third_pad_path)
+        print(code)
+        print(len(third_pad_path))
+        parsed_integer = int(code[:-1])
+        if current_total > parsed_integer * len(third_pad_path):
+            current_total = parsed_integer * len(third_pad_path)
+
+    total += current_total
+print(total)
 #TODO debug, gives a but too much
