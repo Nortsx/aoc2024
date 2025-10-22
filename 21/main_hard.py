@@ -176,7 +176,7 @@ for code in inputs:
     current_total = 100000000000000000000000
     for path_variant in combined_paths:
         current_pad = path_variant
-        print(get_amount_of_symbols_for_depth(path_variant, 0, 2))
+        print(get_amount_of_symbols_for_depth(path_variant, 0, 1))
 #         for i in range(number_of_robots):
 #             current_pad = calculate_path_for_cp(current_pad)
 #             print(len(current_pad))
