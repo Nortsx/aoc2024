@@ -51,7 +51,7 @@ cp['>'] = (2,1)
 
 def getDifference(a, b):
     return (a[0] - b[0], a[1] - b[1])
-#TODO enumerate all possible paths and find the smallest
+
 def calculate_path_for_horizontal_difference(difference):
     output = ''
     if difference > 0:
@@ -118,11 +118,12 @@ def get_possible_paths_of_length(keypad, symbolToReach, currentPosition, current
             get_possible_paths_of_length(keypad, symbolToReach, newPos, currentLine + direction, maxLength, positions)
 
 def calculate_path_for_cp(entry):
-    currentSymbol = 'A'
+    currentSymbol = entry[0]
     currentPosition = cp[currentSymbol]
     output = ''
 
-    for sign in entry:
+    for i in range(1, len(entry)):
+        sign = entry[i]
         difference = getDifference(cp[sign], currentPosition)
         if currentSymbol in ['A', '^'] and sign in ['<']:
             output += calculate_path_for_vertical_difference(difference[1])
@@ -136,19 +137,22 @@ def calculate_path_for_cp(entry):
 
     return output
 
+
 @cache
 def get_amount_of_symbols_for_depth(route, current_depth, max_depth):
+    path = calculate_path_for_cp(route)
     if current_depth == max_depth:
-        path = calculate_path_for_cp(route)
         return len(path)
 
     res = 0
-    for i in range(0, len(route) - 1):
-        res += get_amount_of_symbols_for_depth(route[i:i+1], current_depth + 1, max_depth)
+    for i in range(0, len(path)):
+        if i == 0:
+            entry = 'A' + path[i]
+        else:
+            entry = path[i-1:i+1]
+        res += get_amount_of_symbols_for_depth(entry, current_depth + 1, max_depth)
 
     return res
-
-#TODO test
 
 def combine_paths(provided_paths, current_path, idx, results):
     if idx == len(provided_paths):
@@ -172,12 +176,13 @@ for code in inputs:
     current_total = 100000000000000000000000
     for path_variant in combined_paths:
         current_pad = path_variant
-        for i in range(number_of_robots):
-            current_pad = calculate_path_for_cp(current_pad)
-            print(len(current_pad))
-            print(i)
-        parsed_integer = int(code[:-1])
-        if current_total > parsed_integer * len(current_pad):
-            current_total = parsed_integer * len(current_pad)
-    total += current_total
-print(total)
+        print(get_amount_of_symbols_for_depth(path_variant, 0, 2))
+#         for i in range(number_of_robots):
+#             current_pad = calculate_path_for_cp(current_pad)
+#             print(len(current_pad))
+#             print(i)
+#         parsed_integer = int(code[:-1])
+#         if current_total > parsed_integer * len(current_pad):
+#             current_total = parsed_integer * len(current_pad)
+#     total += current_total
+# print(total)
