@@ -165,15 +165,12 @@ total = 0
 number_of_robots = 2
 for code in inputs:
     first_pad_path = calculate_short_path_for_keypad(code, keypad)
-    print(first_pad_path)
     paths = first_pad_path.split('A')
     paths = paths[:-1]
-    print(paths)
     paths = get_all_shortest_keypad_paths(code, keypad, paths)
     combined_paths = []
     combine_paths(paths, '', 0, combined_paths)
     print(combined_paths)
-    current_total = 100000000000000000000000
     for path_variant in combined_paths:
         current_pad = path_variant
         print(get_amount_of_symbols_for_depth(path_variant, 0, 1))
