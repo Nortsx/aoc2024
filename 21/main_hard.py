@@ -162,7 +162,6 @@ def combine_paths(provided_paths, current_path, idx, results):
         combine_paths(paths, current_path + path + 'A', idx + 1, results)
 
 total = 0
-number_of_robots = 2
 for code in inputs:
     first_pad_path = calculate_short_path_for_keypad(code, keypad)
     paths = first_pad_path.split('A')
@@ -171,15 +170,12 @@ for code in inputs:
     combined_paths = []
     combine_paths(paths, '', 0, combined_paths)
     print(combined_paths)
+    current_total = 1_000_000_000_000_000_000_000_000
     for path_variant in combined_paths:
-        current_pad = path_variant
-        print(get_amount_of_symbols_for_depth(path_variant, 0, 1))
-#         for i in range(number_of_robots):
-#             current_pad = calculate_path_for_cp(current_pad)
-#             print(len(current_pad))
-#             print(i)
-#         parsed_integer = int(code[:-1])
-#         if current_total > parsed_integer * len(current_pad):
-#             current_total = parsed_integer * len(current_pad)
-#     total += current_total
-# print(total)
+        current_pad = 'A' + path_variant
+        current_total = min(current_total, get_amount_of_symbols_for_depth(current_pad, 0, 24))
+    parsed_integer = int(code[:-1])
+    total += parsed_integer * current_total
+
+
+print(total)

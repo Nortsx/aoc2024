@@ -118,11 +118,12 @@ def get_possible_paths_of_length(keypad, symbolToReach, currentPosition, current
             get_possible_paths_of_length(keypad, symbolToReach, newPos, currentLine + direction, maxLength, positions)
 
 def calculate_path_for_cp(entry):
-    currentSymbol = 'A'
+    currentSymbol = entry[0]
     currentPosition = cp[currentSymbol]
     output = ''
 
-    for sign in entry:
+    for i in range(1, len(entry)):
+        sign = entry[i]
         difference = getDifference(cp[sign], currentPosition)
         if currentSymbol in ['A', '^'] and sign in ['<']:
             output += calculate_path_for_vertical_difference(difference[1])
@@ -143,7 +144,7 @@ def combine_paths(provided_paths, current_path, idx, results):
     for path in provided_paths[idx]:
         combine_paths(paths, current_path + path + 'A', idx + 1, results)
 
-total = 0
+# total = 0
 number_of_robots = 2
 for code in inputs:
     first_pad_path = calculate_short_path_for_keypad(code, keypad)
@@ -155,15 +156,20 @@ for code in inputs:
     combined_paths = []
     combine_paths(paths, '', 0, combined_paths)
     print(combined_paths)
-    current_total = 100000000000000000000000
+    current_total = 1_000_000_000_000_000_000_000_000
     for path_variant in combined_paths:
-        current_pad = path_variant
+        current_pad = 'A' + path_variant
         for i in range(number_of_robots):
-            current_pad = calculate_path_for_cp(current_pad)
-            print(len(current_pad))
+            current_pad = 'A' + calculate_path_for_cp(current_pad)
+            print(current_pad)
+            print(len(current_pad) - 1)
             print(i)
-        parsed_integer = int(code[:-1])
-        if current_total > parsed_integer * len(current_pad):
-            current_total = parsed_integer * len(current_pad)
-    total += current_total
-print(total)
+            print("&&&&&&&&&&")
+#         parsed_integer = int(code[:-1])
+#         if current_total > parsed_integer * len(current_pad):
+#             current_total = parsed_integer * len(current_pad)
+#     total += current_total
+# print(total)
+
+
+
